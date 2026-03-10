@@ -6,7 +6,7 @@ Score epidemic prediction intervals
 
 First, clone the repository. This can be done in the terminal using the following command
 ```
-git clone git@github.com:gstonge/scorepi.git
+git clone https://github.com/abbyokleung/scorepi.git
 ```
 
 Second, check the requirements in `requirements.txt`. If some are missing, install them. You can

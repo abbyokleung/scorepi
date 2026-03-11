@@ -50,10 +50,14 @@ class Observations(pd.DataFrame):
         return type(self)(new_obs,value_col=self.value_col,t_col=self.t_col,
                           other_ind_cols=self.other_ind_cols)
 
-    def copy(self):
-        new_obs = super().copy()
-        return type(self)(new_obs,value_col=self.value_col,t_col=self.t_col,
-                          other_ind_cols=self.other_ind_cols)
+    def copy(self, deep=True):
+        new_obs = super().copy(deep=deep)
+        new_obs.__class__ = type(self)
+        new_obs.value_col = self.value_col
+        new_obs.t_col = self.t_col
+        new_obs.other_ind_cols = self.other_ind_cols
+        new_obs.ind_cols = self.ind_cols
+        return new_obs
 
     def get_value(self):
         return self[self.value_col].to_numpy()
@@ -126,10 +130,15 @@ class Predictions(pd.DataFrame):
         return type(self)(new_pred,value_col=self.value_col,quantile_col=self.quantile_col,
                           type_col=self.type_col,t_col=self.t_col,other_ind_cols=self.other_ind_cols)
 
-    def copy(self):
-        new_pred = super().copy()
-        return type(self)(new_pred,value_col=self.value_col,quantile_col=self.quantile_col,
-                          type_col=self.type_col,t_col=self.t_col,other_ind_cols=self.other_ind_cols)
+    def copy(self, deep=True):
+        new_obs = super().copy(deep=deep)
+        new_obs.__class__ = type(self)
+        new_obs.value_col = self.value_col
+        new_obs.quantile_col = self.quantile_col
+        new_obs.type_col = self.type_col
+        new_obs.t_col = self.t_col
+        new_obs.other_ind_cols = self.other_ind_cols
+        return new_obs
 
     def get_t(self):
         return self[self.t_col].to_numpy()

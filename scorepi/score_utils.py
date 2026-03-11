@@ -83,7 +83,8 @@ def all_point_timestamped_scores_from_df(observations, predictions, df, **kwargs
     point = predictions.get_point()
     obs = observations.get_value()
     point_absolute_error = np.abs(obs-point)
-    point_absolute_percentage_error = np.where(obs==0, np.nan, (point_absolute_error / obs) * 100) # return nan if obs == 0
+    safe_obs = np.where(obs == 0, np.nan, obs)
+    point_absolute_percentage_error = np.where(obs==0, np.nan, (point_absolute_error / safe_obs) * 100) # return nan if obs == 0
 
     df['point_absolute_error'] = point_absolute_error
     df['point_absolute_percentage_error'] = point_absolute_percentage_error
@@ -121,7 +122,6 @@ def all_interval_timestamped_scores_from_df(observations, predictions,
     for interval_range in interval_ranges:
         q_low,q_upp = 0.5-interval_range/200,0.5+interval_range/200
         if np.any(predictions.get_quantile(q_low) > predictions.get_quantile(q_upp)):
-            print(predictions.get_quantile(q_upp) - predictions.get_quantile(q_low))
             raise RuntimeError("something went wrong, upper quantile bigger than lower quantile")
         score = interval_score(obs,
                                 predictions.get_quantile(q_low),
